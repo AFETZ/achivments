@@ -17,7 +17,7 @@ AVR ping‑pong (ATmega8, 16 MHz)
 
 Как собрать и прошить
 ---------------------
-Исходник: `main.asm` (чистый asm под avr-gcc). Нужна частота 16 МГц.
+Исходник: `ping_pong.asm` (чистый asm под avr-gcc). Нужна частота 16 МГц.
 
 ```bash
 avr-gcc -mmcu=atmega8 -Os -x assembler-with-cpp -o main.elf main.asm
