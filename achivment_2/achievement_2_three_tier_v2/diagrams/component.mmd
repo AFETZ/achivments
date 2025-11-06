@@ -1,0 +1,26 @@
+%% Mermaid Component-like view (not strict UML)
+flowchart LR
+  subgraph Client_Tier[Client Tier]
+    C[Client]
+  end
+  subgraph Web_Tier[Web Tier]
+    W[Web Server]
+    WV[Auth/Validation]
+  end
+  subgraph App_Tier[Application Tier]
+    A[App Server]
+    BL[Business Logic]
+    LG[Logging]
+  end
+  subgraph Data_Tier[Data Tier]
+    DB[(SQLite DB)]
+  end
+
+  C -->|HTTP POST /api/increment {n}| W
+  W --> WV
+  W -->|HTTP POST /process {n}| A
+  A --> BL
+  BL --> DB
+  BL --> LG
+  A -->|JSON {result|error}| W
+  W -->|JSON {result|error}| C

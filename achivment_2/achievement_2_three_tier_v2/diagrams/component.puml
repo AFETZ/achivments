@@ -1,0 +1,44 @@
+@startuml
+title UML Component Diagram — 3-tier: Client ↔ Web Server ↔ App Server ↔ Database
+
+skinparam componentStyle rectangle
+skinparam packageStyle rectangle
+
+package "Client Tier" {
+  [Client] <<component>> as Client
+}
+
+package "Web Tier" {
+  [Web Server] <<component>> as Web
+  [Auth/Validation] <<component>> as WebVal
+}
+
+package "Application Tier" {
+  [App Server] <<component>> as App
+  [Business Logic] <<component>> as BL
+  [Logging] <<component>> as Log
+}
+
+package "Data Tier" {
+  [SQLite DB] <<database>> as DB
+}
+
+Client -down-> Web : HTTP POST /api/increment {n}
+Web -right-> WebVal : Validate JSON, range 0..N
+WebVal -left-> Web : Ok/Error
+Web -down-> App : HTTP POST /process {n}
+App -right-> BL : Check duplicate / predecessor
+BL -down-> DB : BEGIN, SELECT, INSERT, COMMIT
+DB -up-> BL : Rows / constraints
+BL -left-> Log : write logs
+App -up-> Web : JSON {result|error}
+Web -up-> Client : JSON {result|error}
+
+note right of BL
+  Rules:
+  1) Duplicate: if n already exists -> 409
+  2) PredecessorProcessed: if (n+1) exists -> 422
+  On success: insert n; return n+1
+end note
+
+@enduml

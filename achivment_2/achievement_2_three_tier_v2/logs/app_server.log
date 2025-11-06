@@ -1,0 +1,19 @@
+[2025-11-07 01:11:01,108] INFO App server started. DB_PATH=C:\Users\fifa6\Desktop\achievement_2_three_tier_v2\numbers.db N_MAX=1000000
+[2025-11-07 01:11:26,544] INFO Processed n=41 -> result=42
+[2025-11-07 01:11:26,736] WARNING Duplicate number received: n=41
+[2025-11-07 01:11:27,833] WARNING PredecessorProcessed: n=40 but n+1 already processed
+[2025-11-07 01:21:03,891] WARNING Duplicate number received: n=41
+[2025-11-07 01:21:49,046] WARNING Duplicate number received: n=41
+[2025-11-07 01:23:39,491] INFO Processed n=100 -> result=101
+[2025-11-07 01:23:40,220] WARNING Duplicate number received: n=100
+[2025-11-07 01:23:41,773] WARNING Duplicate number received: n=100
+[2025-11-07 01:23:48,377] WARNING Duplicate number received: n=100
+[2025-11-07 01:27:15,984] WARNING Duplicate number received: n=100
+[2025-11-07 01:27:16,201] WARNING Duplicate number received: n=100
+[2025-11-07 01:27:16,392] WARNING PredecessorProcessed: n=99 but n+1 already processed
+[2025-11-07 01:27:54,436] WARNING Duplicate number received: n=100
+[2025-11-07 01:27:54,639] WARNING Duplicate number received: n=100
+[2025-11-07 01:27:54,828] WARNING PredecessorProcessed: n=99 but n+1 already processed
+[2025-11-07 01:29:41,140] INFO Processed n=555 -> result=556
+[2025-11-07 01:29:41,328] WARNING Duplicate number received: n=555
+[2025-11-07 01:29:41,545] WARNING PredecessorProcessed: n=554 but n+1 already processed

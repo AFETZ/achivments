@@ -1,0 +1,40 @@
+@startuml
+title UML Sequence Diagram — normal and exceptional flows
+
+actor Client
+participant "Web Server" as Web
+participant "App Server" as App
+database "SQLite DB" as DB
+participant "Logger" as Log
+
+Client -> Web : POST /api/increment {n}
+Web -> Web : Validate JSON and range
+alt invalid input
+  Web --> Client : 400 {error}
+else valid
+  Web -> App : POST /process {n}
+  App -> DB : BEGIN IMMEDIATE
+  App -> DB : SELECT 1 FROM numbers WHERE value = n
+  alt duplicate exists
+    App -> Log : warn Duplicate
+    App -> DB : ROLLBACK
+    App --> Web : 409 {error: Duplicate}
+    Web --> Client : 409 {error}
+  else not duplicate
+    App -> DB : SELECT 1 FROM numbers WHERE value = n+1
+    alt predecessor exists
+      App -> Log : warn PredecessorProcessed
+      App -> DB : ROLLBACK
+      App --> Web : 422 {error: PredecessorProcessed}
+      Web --> Client : 422 {error}
+    else ok
+      App -> DB : INSERT(n, processed_at)
+      App -> DB : COMMIT
+      App -> Log : info Processed n -> n+1
+      App --> Web : 200 {result: n+1}
+      Web --> Client : 200 {result: n+1}
+    end
+  end
+end
+
+@enduml
