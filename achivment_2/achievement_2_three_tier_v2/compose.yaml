@@ -1,0 +1,33 @@
+services:
+  app-server:
+    build:
+      context: .
+      dockerfile: Dockerfile.app
+    image: ${REG:-local}/three-tier-app-server:1.0
+    environment:
+      - N_MAX=1000000
+      - DB_PATH=/data/numbers.db
+      - LOG_DIR=/data/logs
+    volumes:
+      - app-data:/data
+    ports:
+      - "5001:5001"
+    restart: unless-stopped
+
+  web-server:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    image: ${REG:-local}/three-tier-web-server:1.0
+    environment:
+      - N_MAX=1000000
+      - APP_SERVER_URL=http://app-server:5001
+      - LOG_DIR=/tmp/logs
+    ports:
+      - "5000:5000"
+    depends_on:
+      - app-server
+    restart: unless-stopped
+
+volumes:
+  app-data:
