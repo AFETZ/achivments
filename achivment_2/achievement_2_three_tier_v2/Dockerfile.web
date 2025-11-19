@@ -1,0 +1,20 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt && pip install --no-cache-dir gunicorn
+
+COPY web_server.py config.py ./
+
+RUN useradd -u 10001 -m appuser
+USER appuser
+
+# адрес app-сервиса будет резолвиться по имени контейнера в Compose
+ENV APP_SERVER_URL=http://app-server:5001 \
+    LOG_DIR=/tmp/logs \
+    N_MAX=1000000
+
+EXPOSE 5000
+CMD ["gunicorn", "-b", "0.0.0.0:5000", "-w", "2", "web_server:app"]
